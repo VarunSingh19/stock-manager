@@ -29,33 +29,19 @@ let stockChart;
 
 function fetchStocks() {
     const stockList = document.getElementById('stockList');
-    const loadingText = document.getElementById('loadingText');
-    const stockChart = document.getElementById('stockChart');
-
-    // Show loading message
-    loadingText.style.display = 'block';
-    stockChart.style.display = 'none';
-    stockList.innerHTML = '';
+    stockList.innerHTML = ''; // Clear the stock list
 
     fetch('/stocks')
         .then(response => response.json())
         .then(stocks => {
-            // Populate the stock list
-            stockList.innerHTML = '';
+            stockList.innerHTML = ''; // Clear the stock list again (if needed)
             stocks.forEach(stock => {
-                stockList.innerHTML += createStockCard(stock);
+                stockList.innerHTML += createStockCard(stock); // Populate the stock cards
             });
-
-            // Hide loading message and show the chart
-            loadingText.style.display = 'none';
-            stockChart.style.display = 'block';
-
-            // Update the chart with new data
-            updateChart(stocks);
+            updateChart(stocks); // Update the chart with the fetched stocks
         })
         .catch(error => {
-            // Handle errors if necessary
-            console.error('Error fetching stocks:', error);
+            console.error('Error fetching stocks:', error); // Handle any errors
         });
 }
 
