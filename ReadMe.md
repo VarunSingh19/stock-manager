@@ -128,12 +128,8 @@ Follow the steps below to set up and run the project locally:
 - **User Authentication**: Add user authentication to manage multiple user portfolios.
 - **Price History**: Add functionality to track and visualize stock price history over time.
 
-## License 📄
-
-This project is licensed under the MIT License.
-
 ---
 
 ### Screenshots 📸
 
-![Stock Manager Pro](screenshot.png)
+![Stock Manager Pro](image.png)
