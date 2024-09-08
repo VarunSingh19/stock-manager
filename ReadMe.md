@@ -6,7 +6,6 @@ Stock Manager Pro is a web-based application that allows users to manage and tra
 
 - **Add New Stock**: Add stocks with details like name, ticker, and price.
 - **Price Direction**: Indicate if the stock is trending up or down.
-- **Filter Stocks**: Filter your portfolio based on price movement (up or down).
 - **Responsive Design**: Fully responsive interface that adapts to different screen sizes.
 - **Stock Price Report**: A chart section (to be implemented) for price trend visualization using Chart.js.
 
@@ -114,11 +113,7 @@ Follow the steps below to set up and run the project locally:
    - Choose whether the price is trending up or down.
    - Click "Add Stock" to save it in your portfolio.
 
-2. **Filter Stocks**:
-
-   - Use the filter radio buttons to view stocks that are either increasing, decreasing, or showing all stocks.
-
-3. **View Price Reports**:
+2. **View Price Reports**:
    - (To be implemented) The stock price chart will display trends and reports based on the data provided.
 
 ## Future Improvements 🔧
