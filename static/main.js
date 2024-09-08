@@ -26,17 +26,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 let stockChart;
-
 function fetchStocks() {
+    const loader = document.getElementById('loader');
+    const stockList = document.getElementById('stockList');
+
+    loader.style.display = 'flex';
+    stockList.innerHTML = '';
+
     fetch('/stocks')
         .then(response => response.json())
         .then(stocks => {
-            const stockList = document.getElementById('stockList');
             stockList.innerHTML = '';
             stocks.forEach(stock => {
                 stockList.innerHTML += createStockCard(stock);
             });
-            updateChart(stocks); // Update the chart with new data
+            updateChart(stocks);
+        })
+        .finally(() => {
+            loader.style.display = 'none';
         });
 }
 
