@@ -100,10 +100,10 @@ function handleCheckboxChange(direction) {
 
     if (direction === 'up') {
         downCheckbox.checked = false; // Uncheck the opposite checkbox
-        tickerInput.value = '📈'; // Update the ticker input value based on selection
+        tickerInput.value = '📉'; // Update the ticker input value based on selection
     } else if (direction === 'down') {
         upCheckbox.checked = false; // Uncheck the opposite checkbox
-        tickerInput.value = '📉'; // Update the ticker input value based on selection
+        tickerInput.value = '📈'; // Update the ticker input value based on selection
     }
 }
 
