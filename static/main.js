@@ -26,26 +26,40 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 let stockChart;
-function fetchStocks() {
-    const loader = document.getElementById('loader');
-    const stockList = document.getElementById('stockList');
 
-    loader.style.display = 'flex';
+function fetchStocks() {
+    const stockList = document.getElementById('stockList');
+    const loadingText = document.getElementById('loadingText');
+    const stockChart = document.getElementById('stockChart');
+
+    // Show loading message
+    loadingText.style.display = 'block';
+    stockChart.style.display = 'none';
     stockList.innerHTML = '';
 
     fetch('/stocks')
         .then(response => response.json())
         .then(stocks => {
+            // Populate the stock list
             stockList.innerHTML = '';
             stocks.forEach(stock => {
                 stockList.innerHTML += createStockCard(stock);
             });
+
+            // Hide loading message and show the chart
+            loadingText.style.display = 'none';
+            stockChart.style.display = 'block';
+
+            // Update the chart with new data
             updateChart(stocks);
         })
-        .finally(() => {
-            loader.style.display = 'none';
+        .catch(error => {
+            // Handle errors if necessary
+            console.error('Error fetching stocks:', error);
         });
 }
+
+
 
 function createStockCard(stock) {
     return `
