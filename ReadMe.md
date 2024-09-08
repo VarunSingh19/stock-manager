@@ -65,13 +65,13 @@ Follow the steps below to set up and run the project locally:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/stock-manager-pro.git
+   git clone https://github.com/VarunSingh19/stock-manager.git
    ```
 
 2. **Navigate to the project directory**:
 
    ```bash
-   cd stock-manager-pro
+   cd stock-manager
    ```
 
 3. **Set up a virtual environment**:
@@ -92,13 +92,15 @@ Follow the steps below to set up and run the project locally:
    - Ensure you have PostgreSQL installed and running.
    - Create a new database:
      ```sql
-     CREATE DATABASE stock_manager;
+     CREATE DATABASE stocks_db;
      ```
 
 6. **Run the Flask app**:
 
    ```bash
    flask run
+   or
+   python app.py
    ```
 
 7. **Run the project**:
