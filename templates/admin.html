@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Manager Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        .stock-card {
+            transition: all 0.3s ease;
+        }
+
+        .stock-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        .modal-open {
+            display: flex;
+        }
+
+        .toast {
+            transition: opacity 0.5s ease;
+        }
+
+        .toast-show {
+            opacity: 1;
+        }
+
+        .toast-hide {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 relative">
+    <div id="toast"
+        class="toast fixed bottom-5 right-5 bg-blue-600 text-white px-4 py-3 rounded shadow-lg toast-hide flex items-center space-x-2">
+        <i class="fas fa-info-circle"></i>
+        <span>Welcome, Varun!</span>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <h1 class="text-white text-2xl font-bold flex items-center">
+                <i class="fas fa-chart-line mr-2"></i>Stock Manager Pro
+            </h1>
+            <div class="block lg:hidden">
+                <button id="menu-button" class="text-white focus:outline-none">
+                    <i class="fas fa-bars fa-lg"></i>
+                </button>
+            </div>
+            <div id="menu" class="hidden lg:flex lg:items-center lg:space-x-4">
+                <span class="text-white">Welcome, varun{{ username }}</span>
+                <a href="{{ url_for('logout') }}"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Logout
+                </a>
+            </div>
+        </div>
+        <div id="mobile-menu" class="lg:hidden hidden">
+            <div class="flex flex-col items-center mt-4 space-y-2">
+                <span class="text-white">Welcome, varun{{ username }}</span>
+                <a href="{{ url_for('logout') }}"
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Content Here -->
+    <div class="container mx-auto mt-8 px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-1">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h2 class="text-xl font-semibold mb-4">Add New Stock</h2>
+                    <form id="stockForm" class="space-y-4">
+                        <input type="hidden" id="stockId">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700">Stock Name</label>
+                            <input type="text" id="name" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="ticker" class="block text-sm font-medium text-gray-700">Stock Ticker</label>
+                            <div class="flex items-center mt-1 space-x-2">
+                                <input type="checkbox" id="upCheckbox" onchange="handleCheckboxChange('up')">
+                                <label for="upCheckbox" class="text-sm">Up</label>
+
+                                <input type="checkbox" id="downCheckbox" onchange="handleCheckboxChange('down')">
+                                <label for="downCheckbox" class="text-sm">Down</label>
+
+                                <input type="text" id="ticker" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="price" class="block text-sm font-medium text-gray-700">Stock Price</label>
+                            <input type="number" id="price" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                        </div>
+                        <button type="submit" id="subBtn"
+                            class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200">
+                            <i class="fas fa-plus-circle mr-2"></i>Add Stock
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="md:col-span-2">
+                <h2 class="text-2xl font-bold mb-4">Your Stock Portfolio</h2>
+                <div id="stockList" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+                <!-- Chart Section -->
+                <div class="mt-8">
+                    <h2 class="text-2xl font-bold mb-4">Stock Price Report</h2>
+                    <div id="stockChartContainer">
+                        <canvas id="stockChart"></canvas> <!-- Initially hidden -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Admin Pop-up Modal -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <h2 class="text-2xl font-bold mb-4">Admin Notification</h2>
+            <p class="mb-4">Welcome Admin! Here is some important information.</p>
+            <button id="close-modal" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='main.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.getElementById('menu-button').addEventListener('click', () => {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Show Toast Message
+        window.onload = function () {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('toast-hide');
+            toast.classList.add('toast-show');
+
+            setTimeout(() => {
+                toast.classList.add('toast-hide');
+            }, 3000);
+        };
+
+        // Admin pop-up logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const role = '{{ role }}';
+            if (role === 'admin') {
+                document.getElementById('adminModal').classList.add('modal-open');
+            }
+
+            document.getElementById('close-modal').addEventListener('click', () => {
+                document.getElementById('adminModal').classList.remove('modal-open');
+            });
+        });
+    </script>
+</body>
+
+</html>

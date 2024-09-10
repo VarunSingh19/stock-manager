@@ -47,6 +47,7 @@ function fetchStocks() {
 
 
 
+
 function createStockCard(stock) {
     return `
     <div class="stock-card bg-white rounded-lg shadow-md p-4 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
